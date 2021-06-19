@@ -27,6 +27,30 @@ def random_flip(img, code=-1):
     return cv2.flip(img, code)
 
 
+def bbox_vflip(bbox, rows, cols):
+    x_min, y_min, x_max, y_max = bbox[:4]
+    return x_min, rows - y_max, x_max, rows - y_min
+
+
+def bbox_hflip(bbox, rows, cols):  # skipcq: PYL-W0613
+    x_min, y_min, x_max, y_max = bbox[:4]
+    return cols - x_max, y_min, cols - x_min, y_max
+
+
+def bbox_flip(bbox, d, rows, cols):
+    if d == 0:
+        bbox = bbox_vflip(bbox, rows, cols)
+    elif d == 1:
+        bbox = bbox_hflip(bbox, rows, cols)
+    elif d == -1:
+        bbox = bbox_hflip(bbox, rows, cols)
+        bbox = bbox_vflip(bbox, rows, cols)
+    else:
+        raise ValueError("Invalid d value {}. Valid values are -1, 0 and 1".format(d))
+    return bbox
+
+
+
 @preserve_channel_dim
 def rotate(img, angle, interpolation=cv2.INTER_LINEAR, border_mode=cv2.BORDER_REFLECT_101, value=None):
     height, width = img.shape[:2]
@@ -47,20 +71,28 @@ def bbox_rotate(bbox, angle, rows, cols):
         A bounding box `(x_min, y_min, x_max, y_max)`.
 
     """
+    matrix = cv2.getRotationMatrix2D((cols / 2, rows / 2), angle, 1.0)
     x_min, y_min, x_max, y_max = bbox[:4]
-    scale = cols / float(rows)
-    x = np.array([x_min, x_max, x_max, x_min]) - 0.5
-    y = np.array([y_min, y_min, y_max, y_max]) - 0.5
-    angle = np.deg2rad(angle)
-    x_t = (np.cos(angle) * x * scale + np.sin(angle) * y) / scale
-    y_t = -np.sin(angle) * x * scale + np.cos(angle) * y
-    x_t = x_t + 0.5
-    y_t = y_t + 0.5
+    boxes_points = np.array([[x_min, y_min], [x_max, y_min], [x_min, y_max], [x_max, y_max]])
 
-    x_min, x_max = min(x_t), max(x_t)
-    y_min, y_max = min(y_t), max(y_t)
+    new_bboxes_points = np.concatenate([boxes_points, np.ones([4, 1])], axis=-1)
+    res = np.matmul(new_bboxes_points, matrix.transpose())
+    x_min, y_min, w, h = cv2.boundingRect(res.astype(np.int32))
 
-    return x_min, y_min, x_max, y_max
+    # x_min, y_min, x_max, y_max = bbox[:4]
+    # scale = cols / float(rows)
+    # x = np.array([x_min, x_max, x_max, x_min]) - 0.5
+    # y = np.array([y_min, y_min, y_max, y_max]) - 0.5
+    # angle = np.deg2rad(angle)
+    # x_t = (np.cos(angle) * x * scale + np.sin(angle) * y) / scale
+    # y_t = -np.sin(angle) * x * scale + np.cos(angle) * y
+    # x_t = x_t + 0.5
+    # y_t = y_t + 0.5
+    #
+    # x_min, x_max = min(x_t), max(x_t)
+    # y_min, y_max = min(y_t), max(y_t)
+
+    return x_min, y_min, x_min+w, y_min+h
 
 
 def normalize(img, mean, std, scale=1.0):
