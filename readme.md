@@ -46,9 +46,25 @@ if __name__ == "__main__":
 
 ```
 
-## Documentation
+# Usage examples
 
-Document will be released later and more image augmentation will be added later.
+sample code like:
+
+```
+list_augmentations = [{"type": "RandomFlip", "prob": 1, "direction": "horizontal"}]
+transform = Compose(list_augmentations)
+data = transform(image=img, bboxes=bboxes, category_ids=category_ids)
+```
+
+## RandomFlip
+
+1. Original image
+
+2. list_augmentations = [{"type": "RandomFlip", "prob": 1, "direction": "horizontal"}]
+
+3. list_augmentations = [{"type": "RandomFlip", "prob": 1, "direction": "vertical"}]
+
+   ![RanddomFilp](https://github.com/huangluyao/pipline_transfrom/blob/master/images/augs_examples/RandomFlip.png)
 
 
 
