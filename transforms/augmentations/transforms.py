@@ -20,10 +20,21 @@ class Resize(BasicTransform):
         return resize(img, self.height, self.width, self.interpolation)
 
     def apply_to_bbox(self, bbox, **params):
-        pass
+        height = params["rows"]
+        width = params["cols"]
+        scale_x = self.width / width
+        scale_y = self.height / height
+        (x_min, y_min, x_max, y_max), tail = bbox[:4], tuple(bbox[4:])
+
+        x_min, x_max = x_min * scale_x, x_max * scale_x
+        y_min, y_max = y_min * scale_y, y_max * scale_y
+        return (x_min, y_min, x_max, y_max) + tail
 
     def apply_to_mask(self, img, **params):
         pass
+
+    def get_params(self, **params):
+        return {"cols": params["image"].shape[1], "rows": params["image"].shape[0]}
 
 
 @TRANSFORM.registry()
@@ -44,10 +55,13 @@ class RandomFlip(BasicTransform):
         return random_flip(img, self.direction)
 
     def apply_to_bbox(self, bbox, **params):
-        pass
+        return bbox_flip(bbox, self.direction, params["rows"], params['cols'])
 
     def apply_to_mask(self, img, **params):
         pass
+
+    def get_params(self, **params):
+        return {"cols": params["image"].shape[1], "rows": params["image"].shape[0]}
 
 
 @TRANSFORM.registry()
@@ -149,3 +163,6 @@ class ColorJitter(BasicTransform):
             img = transform(img)
         return img
 
+    @property
+    def targets(self):
+        return {"image": self.apply} # image only transform
