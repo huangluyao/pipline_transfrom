@@ -2,8 +2,11 @@
   "train": [
     {"type": "Resize", "height": 400, "width": 400, "always_apply": true},
     {"type": "RandomFlip", "prob": 0.5, "direction": "horizontal"},
-    {"type": "ColorJitter","brightness": 0.1, "contrast": 0.5, "saturation": 0.1, "hue": 0.05, "prob": 1},
-    {"type": "RandomCrop", "height": 380, "width": 380, "prob": 1}
+    {"type": "ColorJitter","brightness": 0.1, "contrast": 0.5, "saturation": 0.1, "hue": 0.05, "prob": 0.2},
+    {"type": "RandomCrop", "height": 380, "width": 380, "prob": 0.5},
+    {"type": "MultiplicativeNoise","multiplier":[0.9, 1.1], "prob": 0.2},
+    {"type": "Rotate", "limit": [-5,5], "prob": 0.5},
+    {"type": "GaussNoise", "var_limit":[0.1, 1.0], "mean":5, "prob": 0.2 }
   ],
   "no use": [
     {"type": "Normalize", "mean": [0.485,0.456,0.406], "std": [0.229,0.224,0.225], "always_apply": true},

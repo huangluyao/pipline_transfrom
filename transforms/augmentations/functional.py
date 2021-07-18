@@ -317,3 +317,10 @@ def crop_bbox_by_coords(bbox,  crop_coords):
     x1, y1, _, _ = crop_coords
     cropped_bbox = x_min - x1, y_min - y1, x_max - x1, y_max - y1
     return cropped_bbox
+
+def gauss_noise(image, gauss):
+    dtype = image.dtype
+    image = image.astype("float32")
+    image = image + gauss
+    maxval = MAX_VALUES_BY_DTYPE.get(dtype, 1.0)
+    return np.clip(image, 0, maxval).astype(dtype)
