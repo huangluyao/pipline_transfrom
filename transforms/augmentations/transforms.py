@@ -97,8 +97,6 @@ class Rotate(BasicTransform):
     def apply_to_mask(self, img, angle=0, interpolation=cv2.INTER_LINEAR, **params):
         return rotate(img, angle, interpolation, self.border_mode, self.value)
 
-
-
 @TRANSFORM.registry()
 class Normalize(BasicTransform):
     def __init__(self,mean=(0.485, 0.456, 0.406),
@@ -265,7 +263,3 @@ class GaussNoise(BasicTransform):
 
         gauss = random_state.normal(self.mean, sigma, image.shape)
         return {"gauss": gauss}
-
-
-
-

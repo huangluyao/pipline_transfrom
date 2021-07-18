@@ -12,6 +12,8 @@ MAX_VALUES_BY_DTYPE = {
     np.dtype("float32"): 1.0,
 }
 
+import numpy as np
+
 
 def preserve_channel_dim(func):
     """

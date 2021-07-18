@@ -51,4 +51,39 @@ if __name__ == "__main__":
 Document will be released later and more image augmentation will be added later.
 
 
+# Usage examples
+
+sample code like:
+
+```
+list_augmentations = [{"type": "RandomFlip", "prob": 1, "direction": "horizontal"}]
+transform = Compose(list_augmentations)
+data = transform(image=img, bboxes=bboxes, category_ids=category_ids)
+```
+
+## RandomFlip
+
+1. Original image
+
+2. list_augmentations = [{"type": "RandomFlip", "prob": 1, "direction": "horizontal"}]
+
+3. list_augmentations = [{"type": "RandomFlip", "prob": 1, "direction": "vertical"}]
+
+   ![RanddomFilp](https://github.com/huangluyao/pipline_transfrom/blob/master/images/augs_examples/RandomFlip.png)
+
+## Rotate
+
+1. Original image
+
+2. list_augmentations  = [{"type": "Rotate", "limit": [-5,5], "prob": 1}]
+
+   ![Rotate](https://github.com/huangluyao/pipline_transfrom/blob/master/images/augs_examples/Rotate.png)
+
+## ColorJitter
+
+1. Original image
+
+2. list_augmentations  = {"type": "ColorJitter","brightness": 0.1, "contrast": 0.5, "saturation": 0.1, "hue": 0.05, "prob": 1}
+
+   ![ColorJitter](https://github.com/huangluyao/pipline_transfrom/blob/master/images/augs_examples/ColorJitter.png)
 

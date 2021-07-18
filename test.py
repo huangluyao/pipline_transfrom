@@ -29,6 +29,7 @@ def test_bbox(img_path, annotation_path, transform):
 
 
 if __name__ == "__main__":
+
     json_path = "config/test.json"
 
     with open(json_path, 'r') as fp:
@@ -40,5 +41,13 @@ if __name__ == "__main__":
     # test_cls(img_path,  transform)
     while True:
         test_bbox(img_path, annotation_path, transform)
+
+    transform = Compose(cfg["train"])
+
+    img = cv2.imread('images/image_0741.jpg')
+
+    data = transform(image=img, info='image')
+
+    cv2.imwrite('images/test.jpg', data['image'])
 
 

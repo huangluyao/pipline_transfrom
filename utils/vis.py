@@ -109,4 +109,8 @@ def show_images(images, titles=None, num_cols=None, save_name=None, scale=3, nor
         figs[num_rows - 1, num_imgs % num_cols + i].remove()
     if save_name is not None:
         plt.savefig(save_name)
+<<<<<<< HEAD
     plt.show()
+=======
+    # plt.show()
+>>>>>>> 3479f3325f3853f49082c049d8909f69ffab31a1

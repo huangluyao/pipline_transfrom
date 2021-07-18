@@ -27,5 +27,9 @@ def load_bboxes_index_from_json(json_path):
             ids += 1
     category_id_to_name = {v: k for k, v in category_id_to_name.items()}
 
+<<<<<<< HEAD
     return bboxes, category_ids, category_id_to_name
 
+=======
+    return bboxes, category_ids, category_id_to_name
+>>>>>>> 3479f3325f3853f49082c049d8909f69ffab31a1
